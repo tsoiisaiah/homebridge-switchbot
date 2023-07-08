@@ -152,11 +152,13 @@ export class Fan {
   async ActiveSet(value: CharacteristicValue): Promise<void> {
     this.debugLog(`${this.device.remoteType}: ${this.accessory.displayName} Active: ${value}`);
 
-    this.Active = value;
-    if (this.Active === this.platform.Characteristic.Active.ACTIVE) {
-      this.pushFanOnChanges();
-    } else {
-      this.pushFanOffChanges();
+    if (this.Active !== value) {
+      this.Active = value;
+      if (this.Active === this.platform.Characteristic.Active.ACTIVE) {
+        this.pushFanOnChanges();
+      } else {
+        this.pushFanOffChanges();
+      }
     }
   }
 

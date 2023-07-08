@@ -317,17 +317,19 @@ export class AirConditioner {
   async ActiveSet(value: CharacteristicValue): Promise<void> {
     this.debugLog(`${this.device.remoteType}: ${this.accessory.displayName} Set Active: ${value}`);
 
-    this.Active = value;
-    if (this.Active === this.platform.Characteristic.Active.ACTIVE) {
-      this.debugLog(`${this.device.remoteType}: ${this.accessory.displayName} pushAirConditionerOnChanges, Active: ${this.Active}`);
-      if (this.disablePushOn) {
-        this.pushAirConditionerStatusChanges();
+    if (this.Active !== value) {
+      this.Active = value;
+      if (this.Active === this.platform.Characteristic.Active.ACTIVE) {
+        this.debugLog(`${this.device.remoteType}: ${this.accessory.displayName} pushAirConditionerOnChanges, Active: ${this.Active}`);
+        if (this.disablePushOn) {
+          this.pushAirConditionerStatusChanges();
+        } else {
+          this.pushAirConditionerOnChanges();
+        }
       } else {
-        this.pushAirConditionerOnChanges();
+        this.debugLog(`${this.device.remoteType}: ${this.accessory.displayName} pushAirConditionerOffChanges, Active: ${this.Active}`);
+        this.pushAirConditionerOffChanges();
       }
-    } else {
-      this.debugLog(`${this.device.remoteType}: ${this.accessory.displayName} pushAirConditionerOffChanges, Active: ${this.Active}`);
-      this.pushAirConditionerOffChanges();
     }
   }
 
